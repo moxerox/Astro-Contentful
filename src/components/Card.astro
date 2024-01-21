@@ -1,23 +1,19 @@
 ---
 import "./card.scss";
-import contentful from "contentful";
+import sanityClient from "../sanity-client.ts";
 
-const client = contentful.createClient({
-  space: "ai6qjxixfuuj",
-  environment: "master",
-  accessToken: "CmGSCwzQC1jto6GsHlgt1HJVGfe_1nTfC4TYur1d7Gs",
-});
+let title, subtitle;
 
-let entryData = null;
-let title = null;
-let subTitle = null;
-try {
-  entryData = await client.getEntry("5eCLO1wEjrlskj4Dkee371");
-  title = entryData.fields.name;
-  subTitle = entryData.fields.subTitle;
-} catch (error) {
-  console.error(error);
-}
+// Fetch data
+let data = await sanityClient.fetch(`*[_type == "myDocument"]{
+  title,
+  subtitle
+}`);
+
+title = data[0].title;
+subtitle = data[0].subtitle;
+
+console.log(data);
 ---
 
 <section id="content-1637">
@@ -26,7 +22,7 @@ try {
       <div class="cs-flex">
         <span class="cs-topper">{title}</span>
         <h2 class="cs-title">
-          {subTitle}
+          {subtitle}
         </h2>
       </div>
       <div class="cs-flex">
